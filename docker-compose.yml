@@ -10,17 +10,30 @@ services:
       - "5000:5000"
     volumes:
       - ./backend:/usr/src/app
+    depends_on:
+      - backend-db
 
-  client:
-    build:
-      context: ./client/
+  # client:
+  #   build:
+  #     context: ./client/
+  #     dockerfile: Dockerfile
+  #   command: npm start && npm run storybook
+  #   ports:
+  #     - "3000:3000"
+  #     - "6006:6006"
+  #   volumes:
+  #     - ./client:/usr/src/app
+  #     - /usr/src/app/node_modules
+
+  backend-db:
+    build: 
+      context: ./db
       dockerfile: Dockerfile
-    command: npm start
     ports:
-      - "3000:3000"
-    volumes:
-      - ./client:/usr/src/app
-      - /usr/src/app/node_modules
+    - "5432:5432"
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
 
 
   
